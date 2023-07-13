@@ -6,6 +6,7 @@ import com.example.bloglv4.dto.PostRequestDto;
 import com.example.bloglv4.dto.PostResponseDto;
 import com.example.bloglv4.security.UserDetailsImpl;
 import com.example.bloglv4.service.PostService;
+import com.sun.jdi.request.DuplicateRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -85,5 +86,28 @@ public class PostController {
         }
     }
 
+    //7. 글 좋아요 기능
+    @PostMapping("/posts/{id}/like")
+    public ResponseEntity<ApiResponseDto> likePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        try {
+            postService.likePost(id, userDetails.getUser());
+        } catch (DuplicateRequestException e) {
+            return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponseDto("게시글 좋아요 성공", HttpStatus.ACCEPTED.value()));
+    }
+
+    //8. 글 좋아요 취소 기능
+    @DeleteMapping("/posts/{id}/like")
+    public ResponseEntity<ApiResponseDto> deleteLikePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        try {
+            postService.deleteLikePost(id, userDetails.getUser());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponseDto("게시글 좋아요 취소 성공", HttpStatus.ACCEPTED.value()));
+    }
 
 }

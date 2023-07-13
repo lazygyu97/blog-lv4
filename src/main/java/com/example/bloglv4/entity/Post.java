@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,9 @@ public class Post extends TimeStamped {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<PostLike> postLikes = new ArrayList<>();
 
     public Post(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
