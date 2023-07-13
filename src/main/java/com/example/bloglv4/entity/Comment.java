@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -25,6 +28,12 @@ public class Comment extends TimeStamped {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<CommentLike> commentLikes = new ArrayList<>();
+
+    //여기서 setter를 따로 작성해주는 이유가 뭘까?...
+    //그냥 롬북으로 해줘도 문제가 없을것 같은데...
 
     public Comment(String body) {
         this.body = body;

@@ -47,7 +47,7 @@ public class PostService {
     public PostListResponseDto getPosts() {
 
         //받아온 글을 List 형식으로 정리
-        List<PostResponseDto> postList = postRepository.findAll().stream().map(PostResponseDto::new).collect(Collectors.toList());
+        List<PostResponseDto> postList = postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).collect(Collectors.toList());
 
         return new PostListResponseDto(postList);
 
@@ -101,7 +101,7 @@ public class PostService {
     @Transactional
     public void likePost(Long id, User user) {
         Post post = findPost(id);
-        Optional<PostLike> postLikeOptional=checkLike(user, post);
+        Optional<PostLike> postLikeOptional = checkLike(user, post);
 
         if (postLikeOptional.isPresent()) {
             throw new DuplicateRequestException("이미 좋아요 한 게시글 입니다.");
@@ -115,19 +115,21 @@ public class PostService {
     @Transactional
     public void deleteLikePost(Long id, User user) {
         Post post = findPost(id);
-        Optional<PostLike> postLikeOptional=checkLike(user, post);
+        Optional<PostLike> postLikeOptional = checkLike(user, post);
         if (postLikeOptional.isPresent()) {
             postLikeRepository.delete(postLikeOptional.get());
         } else {
-            throw new IllegalArgumentException("해당 게시글에 취소할 좋아요가 없습니다.");
+            throw new IllegalArgumentException("아직 좋아요를 누르지 않은 글입니다.");
         }
     }
 
+    //글이 있는지 확인하는 메서드
     public Post findPost(long id) {
         return postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택한 게시글은 존재하지 않습니다."));
     }
 
-    public Optional<PostLike> checkLike(User user, Post post){
+    //글 좋아요 확인 메서드
+    public Optional<PostLike> checkLike(User user, Post post) {
         return postLikeRepository.findByUserAndPost(user, post);
     }
 

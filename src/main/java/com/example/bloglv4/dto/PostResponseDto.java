@@ -17,7 +17,7 @@ public class PostResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private String username;
-    private List<CommentResponseDto> comments;
+    private List<CommentResponseDto> comments;//댓글을 목록으로
     private Integer likeCount;
 
     public PostResponseDto(Post post) {
@@ -31,7 +31,7 @@ public class PostResponseDto {
                 .map(CommentResponseDto::new)
                 .sorted(Comparator.comparing(CommentResponseDto::getCreatedAt).reversed()) // 작성날짜 내림차순
                 .toList();
-        this.likeCount = post.getPostLikes().size();
+        this.likeCount = post.getPostLikes().size();//배열로 넘어오는 좋아요 목록의 사이즈를 담아준다.
 
     }
 

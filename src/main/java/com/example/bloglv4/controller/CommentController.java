@@ -5,6 +5,7 @@ import com.example.bloglv4.dto.CommentRequestDto;
 import com.example.bloglv4.dto.CommentResponseDto;
 import com.example.bloglv4.security.UserDetailsImpl;
 import com.example.bloglv4.service.CommentService;
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -52,4 +53,27 @@ public class CommentController {
         }
     }
 
+    //4. 댓글 좋아요 기능
+    @PostMapping("/comments/{id}/like")
+    public ResponseEntity<ApiResponseDto> likeComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        try {
+            commentService.likeComment(id, userDetails.getUser());
+        } catch (DuplicateRequestException e) {
+            return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponseDto("댓글 좋아요 성공", HttpStatus.ACCEPTED.value()));
+    }
+
+    //5. 댓글 좋아요 취소 기능
+    @DeleteMapping("/comments/{id}/like")
+    public ResponseEntity<ApiResponseDto> deleteLkeComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        try {
+            commentService.deleteLikeComment(id, userDetails.getUser());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ApiResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponseDto("댓글 좋아요 취소 성공", HttpStatus.ACCEPTED.value()));
+    }
 }
