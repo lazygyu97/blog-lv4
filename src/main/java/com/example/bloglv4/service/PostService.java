@@ -79,11 +79,6 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-    public Post findPost(long id) {
-        return postRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.")
-        );
-    }
 
     //6. 글 번호를 통한 수정 기능
     @Transactional
@@ -98,5 +93,12 @@ public class PostService {
         post.setContent(requestDto.getContent());
 
         return new PostResponseDto(post);
+    }
+
+
+    public Post findPost(long id) {
+        return postRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.")
+        );
     }
 }
