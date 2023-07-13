@@ -101,11 +101,12 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-
+    //블랙리스트에 추가
     public void addTokenToBlacklist(String token) {
         tokenBlacklist.add(token);
     }
 
+    //쿠키에 있는 토큰 제거
     public void removeTokenFromCookie(HttpServletResponse response) {
         Cookie cookie = createExpiredCookie();
         response.addCookie(cookie);

@@ -5,12 +5,8 @@ import com.example.bloglv4.entity.User;
 import com.example.bloglv4.entity.UserRoleEnum;
 import com.example.bloglv4.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.security.auth.login.LoginException;
 
 @Service
 @RequiredArgsConstructor

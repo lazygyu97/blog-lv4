@@ -4,7 +4,6 @@ import com.example.bloglv4.dto.ApiResponseDto;
 import com.example.bloglv4.dto.AuthRequestDto;
 import com.example.bloglv4.jwt.JwtUtil;
 import com.example.bloglv4.service.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
